@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Insurance Fraud Detection</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; color: #333; }
+    nav { background: #1a237e; padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; }
+    nav h1 { color: #fff; font-size: 1.25rem; }
+    nav a { color: rgba(255,255,255,0.85); text-decoration: none; margin-left: 1.5rem; font-size: 0.9rem; }
+    nav a:hover { color: #fff; }
+    .hero { text-align: center; padding: 4rem 2rem; background: linear-gradient(135deg, #1a237e, #283593); color: #fff; }
+    .hero h2 { font-size: 2.2rem; margin-bottom: 1rem; }
+    .hero p { font-size: 1.05rem; opacity: 0.85; max-width: 600px; margin: 0 auto 2rem; }
+    .hero a { display: inline-block; padding: 0.75rem 2rem; background: #fff; color: #1a237e; border-radius: 6px; text-decoration: none; font-weight: 600; }
+    .hero a:hover { background: #e8eaf6; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; max-width: 900px; margin: -2rem auto 3rem; padding: 0 2rem; }
+    .card { background: #fff; border-radius: 8px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .card h3 { font-size: 1.1rem; margin-bottom: 0.5rem; color: #1a237e; }
+    .card p { font-size: 0.9rem; color: #555; line-height: 1.5; }
+    footer { text-align: center; padding: 1.5rem; font-size: 0.8rem; color: #999; }
+  </style>
+</head>
+<body>
+  <nav>
+    <h1>Insurance Fraud Detection</h1>
+    <div>
+      <a href="/">Home</a>
+      <a href="/predict">Predict</a>
+      <a href="/about">About</a>
+    </div>
+  </nav>
+
+  <div class="hero">
+    <h2>Detect Fraudulent Insurance Claims</h2>
+    <p>A machine learning system that analyzes insurance claim data to identify potentially fraudulent claims using Random Forest classification.</p>
+    <a href="/predict">Make a Prediction</a>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <h3>6 Models Compared</h3>
+      <p>Decision Tree, Random Forest, KNN, Logistic Regression, Naive Bayes, and SVM evaluated with cross-validation.</p>
+    </div>
+    <div class="card">
+      <h3>28 Features</h3>
+      <p>Policy details, insured demographics, incident information, and claim amounts analyzed for fraud patterns.</p>
+    </div>
+    <div class="card">
+      <h3>77% Accuracy</h3>
+      <p>Best model (Random Forest) achieves 77.3% cross-validated accuracy on the insurance claims dataset.</p>
+    </div>
+  </div>
+
+  <footer>&copy; 2026 Insurance Fraud Detection &mdash; ML Lab Project</footer>
+</body>
+</html>

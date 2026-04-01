@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Predict &mdash; Insurance Fraud Detection</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; color: #333; }
+    nav { background: #1a237e; padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; }
+    nav h1 { color: #fff; font-size: 1.25rem; }
+    nav a { color: rgba(255,255,255,0.85); text-decoration: none; margin-left: 1.5rem; font-size: 0.9rem; }
+    nav a:hover { color: #fff; }
+    .container { max-width: 900px; margin: 2rem auto; padding: 0 2rem; }
+    h2 { margin-bottom: 0.5rem; color: #1a237e; }
+    .subtitle { color: #666; margin-bottom: 1.5rem; font-size: 0.9rem; }
+    .result { padding: 1rem 1.5rem; border-radius: 6px; margin-bottom: 1.5rem; font-weight: 600; font-size: 1rem; }
+    .result.fraud { background: #ffebee; color: #c62828; border: 1px solid #ef9a9a; }
+    .result.legit { background: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; }
+    .result.error { background: #fff3e0; color: #e65100; border: 1px solid #ffcc80; }
+    form { background: #fff; border-radius: 8px; padding: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; }
+    .field { display: flex; flex-direction: column; }
+    .field label { font-size: 0.8rem; font-weight: 600; color: #555; margin-bottom: 0.25rem; text-transform: capitalize; }
+    .field input, .field select { padding: 0.5rem 0.75rem; border: 1px solid #ddd; border-radius: 4px; font-size: 0.9rem; }
+    .field input:focus, .field select:focus { outline: none; border-color: #1a237e; box-shadow: 0 0 0 2px rgba(26,35,126,0.15); }
+    .submit-row { margin-top: 1.5rem; text-align: center; }
+    .submit-row button { padding: 0.75rem 3rem; background: #1a237e; color: #fff; border: none; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; }
+    .submit-row button:hover { background: #283593; }
+    footer { text-align: center; padding: 1.5rem; font-size: 0.8rem; color: #999; }
+  </style>
+</head>
+<body>
+  <nav>
+    <h1>Insurance Fraud Detection</h1>
+    <div>
+      <a href="/">Home</a>
+      <a href="/predict">Predict</a>
+      <a href="/about">About</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h2>Claim Prediction</h2>
+    <p class="subtitle">Fill in the claim details below and submit to check for fraud.</p>
+
+    {% if prediction_text %}
+      {% if 'FRAUDULENT' in prediction_text %}
+        <div class="result fraud">{{ prediction_text }}</div>
+      {% elif 'LEGITIMATE' in prediction_text %}
+        <div class="result legit">{{ prediction_text }}</div>
+      {% else %}
+        <div class="result error">{{ prediction_text }}</div>
+      {% endif %}
+    {% endif %}
+
+    <form method="POST" action="/predict">
+      <div class="form-grid">
+        <!-- Numeric fields -->
+        <div class="field">
+          <label>Age</label>
+          <input type="number" name="age" value="38" min="18" max="100">
+        </div>
+        <div class="field">
+          <label>Policy Deductible ($)</label>
+          <input type="number" name="policy_deductable" value="1000" step="500">
+        </div>
+        <div class="field">
+          <label>Annual Premium ($)</label>
+          <input type="number" name="policy_annual_premium" value="1200" step="0.01">
+        </div>
+        <div class="field">
+          <label>Umbrella Limit</label>
+          <input type="number" name="umbrella_limit" value="0" step="1000000">
+        </div>
+        <div class="field">
+          <label>Capital Gains ($)</label>
+          <input type="number" name="capital-gains" value="0">
+        </div>
+        <div class="field">
+          <label>Capital Loss ($)</label>
+          <input type="number" name="capital-loss" value="0">
+        </div>
+        <div class="field">
+          <label>Incident Hour (0-23)</label>
+          <input type="number" name="incident_hour_of_the_day" value="12" min="0" max="23">
+        </div>
+        <div class="field">
+          <label>Vehicles Involved</label>
+          <input type="number" name="number_of_vehicles_involved" value="1" min="1" max="4">
+        </div>
+        <div class="field">
+          <label>Bodily Injuries</label>
+          <input type="number" name="bodily_injuries" value="0" min="0" max="5">
+        </div>
+        <div class="field">
+          <label>Witnesses</label>
+          <input type="number" name="witnesses" value="1" min="0" max="5">
+        </div>
+        <div class="field">
+          <label>Total Claim Amount ($)</label>
+          <input type="number" name="total_claim_amount" value="50000" step="1000">
+        </div>
+        <div class="field">
+          <label>Auto Year</label>
+          <input type="number" name="auto_year" value="2015" min="1995" max="2026">
+        </div>
+
+        <!-- Select fields -->
+        <div class="field">
+          <label>Policy State</label>
+          <select name="policy_state">
+            <option value="IL">Illinois</option>
+            <option value="IN">Indiana</option>
+            <option value="OH" selected>Ohio</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Policy CSL</label>
+          <select name="policy_csl">
+            <option value="100/300">100/300</option>
+            <option value="250/500" selected>250/500</option>
+            <option value="500/1000">500/1000</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Insured Sex</label>
+          <select name="insured_sex">
+            <option value="FEMALE">Female</option>
+            <option value="MALE" selected>Male</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Education Level</label>
+          <select name="insured_education_level">
+            <option value="Associate">Associate</option>
+            <option value="College" selected>College</option>
+            <option value="High School">High School</option>
+            <option value="JD">JD</option>
+            <option value="MD">MD</option>
+            <option value="Masters">Masters</option>
+            <option value="PhD">PhD</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Occupation</label>
+          <select name="insured_occupation">
+            <option value="adm-clerical">Adm-Clerical</option>
+            <option value="armed-forces">Armed Forces</option>
+            <option value="craft-repair" selected>Craft Repair</option>
+            <option value="exec-managerial">Exec Managerial</option>
+            <option value="farming-fishing">Farming/Fishing</option>
+            <option value="handlers-cleaners">Handlers/Cleaners</option>
+            <option value="machine-op-inspct">Machine Op/Inspct</option>
+            <option value="other-service">Other Service</option>
+            <option value="priv-house-serv">Priv House Serv</option>
+            <option value="prof-specialty">Prof Specialty</option>
+            <option value="protective-serv">Protective Serv</option>
+            <option value="sales">Sales</option>
+            <option value="tech-support">Tech Support</option>
+            <option value="transport-moving">Transport/Moving</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Hobbies</label>
+          <select name="insured_hobbies">
+            <option value="base-jumping">Base Jumping</option>
+            <option value="basketball">Basketball</option>
+            <option value="board-games">Board Games</option>
+            <option value="bungie-jumping">Bungee Jumping</option>
+            <option value="camping">Camping</option>
+            <option value="chess">Chess</option>
+            <option value="cross-fit">CrossFit</option>
+            <option value="dancing">Dancing</option>
+            <option value="golf">Golf</option>
+            <option value="hiking">Hiking</option>
+            <option value="kayaking">Kayaking</option>
+            <option value="movies">Movies</option>
+            <option value="paintball">Paintball</option>
+            <option value="polo">Polo</option>
+            <option value="reading" selected>Reading</option>
+            <option value="skydiving">Skydiving</option>
+            <option value="sleeping">Sleeping</option>
+            <option value="video-games">Video Games</option>
+            <option value="yachting">Yachting</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Relationship</label>
+          <select name="insured_relationship">
+            <option value="husband" selected>Husband</option>
+            <option value="not-in-family">Not in Family</option>
+            <option value="other-relative">Other Relative</option>
+            <option value="own-child">Own Child</option>
+            <option value="unmarried">Unmarried</option>
+            <option value="wife">Wife</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Incident Type</label>
+          <select name="incident_type">
+            <option value="Multi-vehicle Collision">Multi-vehicle Collision</option>
+            <option value="Parked Car">Parked Car</option>
+            <option value="Single Vehicle Collision" selected>Single Vehicle Collision</option>
+            <option value="Vehicle Theft">Vehicle Theft</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Collision Type</label>
+          <select name="collision_type">
+            <option value="Front Collision">Front Collision</option>
+            <option value="Rear Collision">Rear Collision</option>
+            <option value="Side Collision" selected>Side Collision</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Incident Severity</label>
+          <select name="incident_severity">
+            <option value="Major Damage">Major Damage</option>
+            <option value="Minor Damage" selected>Minor Damage</option>
+            <option value="Total Loss">Total Loss</option>
+            <option value="Trivial Damage">Trivial Damage</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Authorities Contacted</label>
+          <select name="authorities_contacted">
+            <option value="Ambulance">Ambulance</option>
+            <option value="Fire">Fire</option>
+            <option value="None">None</option>
+            <option value="Other">Other</option>
+            <option value="Police" selected>Police</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Incident State</label>
+          <select name="incident_state">
+            <option value="NC">North Carolina</option>
+            <option value="NY">New York</option>
+            <option value="OH" selected>Ohio</option>
+            <option value="PA">Pennsylvania</option>
+            <option value="SC">South Carolina</option>
+            <option value="VA">Virginia</option>
+            <option value="WV">West Virginia</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Incident City</label>
+          <select name="incident_city">
+            <option value="Arlington">Arlington</option>
+            <option value="Columbus" selected>Columbus</option>
+            <option value="Hillsdale">Hillsdale</option>
+            <option value="Northbend">Northbend</option>
+            <option value="Northbrook">Northbrook</option>
+            <option value="Riverwood">Riverwood</option>
+            <option value="Springfield">Springfield</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Property Damage</label>
+          <select name="property_damage">
+            <option value="NO" selected>No</option>
+            <option value="YES">Yes</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Police Report Available</label>
+          <select name="police_report_available">
+            <option value="NO" selected>No</option>
+            <option value="YES">Yes</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Auto Make</label>
+          <select name="auto_make">
+            <option value="Accura">Acura</option>
+            <option value="Audi">Audi</option>
+            <option value="BMW">BMW</option>
+            <option value="Chevrolet">Chevrolet</option>
+            <option value="Dodge">Dodge</option>
+            <option value="Ford">Ford</option>
+            <option value="Honda">Honda</option>
+            <option value="Jeep">Jeep</option>
+            <option value="Mercedes">Mercedes</option>
+            <option value="Nissan">Nissan</option>
+            <option value="Saab">Saab</option>
+            <option value="Suburu">Subaru</option>
+            <option value="Toyota" selected>Toyota</option>
+            <option value="Volkswagen">Volkswagen</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="submit-row">
+        <button type="submit">Predict</button>
+      </div>
+    </form>
+  </div>
+
+  <footer>&copy; 2026 Insurance Fraud Detection &mdash; ML Lab Project</footer>
+</body>
+</html>

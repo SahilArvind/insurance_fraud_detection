@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About &mdash; Insurance Fraud Detection</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; color: #333; }
+    nav { background: #1a237e; padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; }
+    nav h1 { color: #fff; font-size: 1.25rem; }
+    nav a { color: rgba(255,255,255,0.85); text-decoration: none; margin-left: 1.5rem; font-size: 0.9rem; }
+    nav a:hover { color: #fff; }
+    .container { max-width: 750px; margin: 2rem auto; padding: 0 2rem; }
+    .container h2 { color: #1a237e; margin-bottom: 1rem; }
+    .container p, .container li { font-size: 0.95rem; line-height: 1.7; color: #444; }
+    .container p { margin-bottom: 1rem; }
+    .section { background: #fff; border-radius: 8px; padding: 1.5rem 2rem; margin-bottom: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .section h3 { color: #1a237e; margin-bottom: 0.75rem; font-size: 1.1rem; }
+    ul { padding-left: 1.25rem; margin-bottom: 0.5rem; }
+    li { margin-bottom: 0.4rem; }
+    table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; font-size: 0.9rem; }
+    th, td { padding: 0.5rem 0.75rem; text-align: left; border-bottom: 1px solid #eee; }
+    th { color: #1a237e; font-weight: 600; }
+    footer { text-align: center; padding: 1.5rem; font-size: 0.8rem; color: #999; }
+  </style>
+</head>
+<body>
+  <nav>
+    <h1>Insurance Fraud Detection</h1>
+    <div>
+      <a href="/">Home</a>
+      <a href="/predict">Predict</a>
+      <a href="/about">About</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h2>About This Project</h2>
+
+    <div class="section">
+      <h3>Overview</h3>
+      <p>This project uses machine learning to detect fraudulent insurance claims. A Random Forest classifier is trained on a dataset of 1,000 insurance claims with 28 features covering policy details, insured demographics, incident information, and claim amounts.</p>
+    </div>
+
+    <div class="section">
+      <h3>Models Evaluated</h3>
+      <table>
+        <tr><th>Model</th><th>Test Accuracy</th><th>CV Score</th></tr>
+        <tr><td>Decision Tree</td><td>78.0%</td><td>76.0%</td></tr>
+        <tr><td>Random Forest</td><td>74.5%</td><td>77.3%</td></tr>
+        <tr><td>KNN</td><td>71.0%</td><td>71.4%</td></tr>
+        <tr><td>Logistic Regression</td><td>71.0%</td><td>75.9%</td></tr>
+        <tr><td>Naive Bayes</td><td>70.5%</td><td>76.4%</td></tr>
+        <tr><td>SVM</td><td>69.5%</td><td>74.4%</td></tr>
+      </table>
+      <p style="margin-top: 0.75rem;">Random Forest was selected as the best model based on cross-validation score (77.3%).</p>
+    </div>
+
+    <div class="section">
+      <h3>Tech Stack</h3>
+      <ul>
+        <li><strong>Python</strong> &mdash; Core language</li>
+        <li><strong>scikit-learn</strong> &mdash; Model training and evaluation</li>
+        <li><strong>pandas</strong> &mdash; Data preprocessing</li>
+        <li><strong>Flask</strong> &mdash; Web application framework</li>
+        <li><strong>joblib</strong> &mdash; Model serialization</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h3>Features Used (28)</h3>
+      <p>Age, policy state, CSL, deductible, annual premium, umbrella limit, sex, education level, occupation, hobbies, relationship, capital gains/losses, incident type, collision type, severity, authorities contacted, incident state/city/hour, vehicles involved, property damage, bodily injuries, witnesses, police report availability, total claim amount, auto make, and auto year.</p>
+    </div>
+  </div>
+
+  <footer>&copy; 2026 Insurance Fraud Detection &mdash; ML Lab Project</footer>
+</body>
+</html>
